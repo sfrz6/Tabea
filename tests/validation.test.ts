@@ -170,6 +170,26 @@ describe("account creation", () => {
     }
   });
 
+  it("accepts a password of exactly the minimum length", () => {
+    expect(createUserSchema.safeParse({ ...valid, password: "12345678" }).success).toBe(
+      true,
+    );
+    expect(createUserSchema.safeParse({ ...valid, password: "1234567" }).success).toBe(
+      false,
+    );
+  });
+
+  it("allows an all numeric password", () => {
+    // A deliberate decision, not an oversight. Several people here will choose
+    // a number they can remember, and length is the only rule.
+    for (const password of ["80808080", "12345678", "9988776655"]) {
+      expect(
+        createUserSchema.safeParse({ ...valid, password }).success,
+        `${password} should be accepted`,
+      ).toBe(true);
+    }
+  });
+
   it("normalises a phone number so it is ready for messaging later", () => {
     const result = createUserSchema.safeParse({
       ...valid,
@@ -236,7 +256,7 @@ describe("validation messages", () => {
 
   it("fills the limit into the message", () => {
     const english = createTranslator("en");
-    expect(validationMessage("passwordTooShort", english)).toContain("10");
+    expect(validationMessage("passwordTooShort", english)).toContain("8");
   });
 
   it("falls back safely for an unknown key", () => {

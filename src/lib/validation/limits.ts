@@ -17,7 +17,14 @@ export const LIMITS = {
   nameMax: 120,
   emailMax: 180,
   phoneMax: 24,
-  passwordMin: 10,
+  /**
+   * Eight characters, with no complexity rule: digits only is a valid choice.
+   * The people using Tabea are a family and their workers, several of whom
+   * will pick a number they can remember, and a rule that pushes them towards
+   * writing a password down would cost more than it buys. Sign in is rate
+   * limited per username and hashes use bcrypt at twelve rounds.
+   */
+  passwordMin: 8,
   projectNameMax: 80,
   searchMax: 120,
 } as const;

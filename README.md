@@ -281,6 +281,7 @@ Every page is rendered on demand, because every page depends on who is signed in
 ## Security notes
 
 - Passwords are hashed with bcrypt at twelve rounds. Plaintext is never stored and a hash is never sent to the browser.
+- The only password rule is a minimum of eight characters. There is deliberately no complexity requirement, so an all numeric password is valid: the people using Tabea include workers who will choose a number they can remember, and a rule that pushes somebody into writing their password down would cost more than it buys here. Sign in is rate limited per username, which is what makes a short password workable in practice.
 - Sessions are server side. The cookie holds a random 256 bit token; the database holds an HMAC of it keyed with `AUTH_SECRET`, so reading the database alone does not yield a usable session. Cookies are HttpOnly, `SameSite=Lax`, and `Secure` in production.
 - Every authorization decision is made on the server. Hiding a button is presentation only; the matching server action repeats the check before it writes.
 - Identifiers that arrive from the browser are validated and authorized. A task is loaded through a query that already carries the visibility rule, which is what prevents reaching another person's task by editing a URL.
