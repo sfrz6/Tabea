@@ -1,0 +1,14 @@
+# The repository stores text with LF endings, whatever the machine it is edited
+# on uses. Tabea is developed on Windows and built on Linux, so normalising here
+# keeps diffs clean and avoids shell scripts arriving with carriage returns.
+* text=auto eol=lf
+
+# Binary assets are never converted.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.pdf binary

@@ -1,0 +1,351 @@
+@import "tailwindcss";
+
+/* -------------------------------------------------------------------------- */
+/*                              Tabea design tokens                           */
+/* -------------------------------------------------------------------------- */
+/*
+ * Every colour in the product is one of these tokens. Components never hold a
+ * raw hex value, which is what makes the dark theme a single block of overrides
+ * rather than a second set of styles to maintain.
+ *
+ * The palette is deliberately quiet: one brand colour, a cool neutral scale and
+ * four restrained semantic colours. Status and priority are carried by small
+ * marks and by text, never by filling the screen with colour.
+ */
+
+:root {
+  color-scheme: light;
+
+  --canvas: #f6f7f8;
+  --surface: #ffffff;
+  --surface-sunken: #f0f2f4;
+  --surface-raised: #ffffff;
+
+  --border: #e3e6e9;
+  --border-strong: #cdd2d8;
+
+  --ink: #14181c;
+  --ink-muted: #5a646e;
+  --ink-subtle: #8a939c;
+
+  --brand: #11625a;
+  --brand-strong: #0c4a44;
+  --brand-soft: #e4f0ee;
+  --on-brand: #ffffff;
+
+  --success: #1c7a4a;
+  --success-soft: #e4f2ea;
+  --warn: #8d5a14;
+  --warn-soft: #fbf0de;
+  --danger: #b3261e;
+  --danger-soft: #fbe9e7;
+  --info: #1f5ea8;
+  --info-soft: #e6eef9;
+  --neutral-soft: #edeff2;
+
+  --focus: #11625a;
+  --shadow-card: 0 1px 2px rgb(20 24 28 / 0.05), 0 1px 1px rgb(20 24 28 / 0.03);
+  --shadow-raised: 0 4px 16px rgb(20 24 28 / 0.08), 0 1px 2px rgb(20 24 28 / 0.04);
+  --shadow-sheet: 0 -8px 32px rgb(20 24 28 / 0.14);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    --canvas: #0e1113;
+    --surface: #171b1e;
+    --surface-sunken: #121619;
+    --surface-raised: #1d2226;
+
+    --border: #262c31;
+    --border-strong: #39424a;
+
+    --ink: #edf0f2;
+    --ink-muted: #a3adb5;
+    --ink-subtle: #76818a;
+
+    --brand: #4fbfae;
+    --brand-strong: #6fd3c3;
+    --brand-soft: #16302d;
+    --on-brand: #04201c;
+
+    --success: #5fc98e;
+    --success-soft: #142a1f;
+    --warn: #e0b263;
+    --warn-soft: #2e2416;
+    --danger: #f08a82;
+    --danger-soft: #331b19;
+    --info: #7fb2ee;
+    --info-soft: #15233a;
+    --neutral-soft: #21272b;
+
+    --focus: #4fbfae;
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4);
+    --shadow-raised: 0 4px 20px rgb(0 0 0 / 0.5);
+    --shadow-sheet: 0 -8px 32px rgb(0 0 0 / 0.55);
+  }
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-surface-raised: var(--surface-raised);
+
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-subtle: var(--ink-subtle);
+
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-soft: var(--brand-soft);
+  --color-on-brand: var(--on-brand);
+
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-neutral-soft: var(--neutral-soft);
+
+  --font-sans: var(--font-latin), var(--font-arabic), ui-sans-serif, system-ui, sans-serif;
+
+  --shadow-card: var(--shadow-card);
+  --shadow-raised: var(--shadow-raised);
+  --shadow-sheet: var(--shadow-sheet);
+
+  --radius-card: 0.625rem;
+  --radius-control: 0.5rem;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                 Base layer                                 */
+/* -------------------------------------------------------------------------- */
+
+@layer base {
+  html {
+    /* Keeps a sticky header and a sticky action bar from fighting on iOS. */
+    scroll-padding-block: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--canvas);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    /* Removes the grey flash when tapping a control in Safari. */
+    -webkit-tap-highlight-color: transparent;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /*
+   * Arabic needs slightly more line height than Latin to stay comfortable, and
+   * the Arabic face is set first in the stack so it is not substituted.
+   */
+  [dir="rtl"] body {
+    font-family: var(--font-arabic), var(--font-latin), ui-sans-serif, system-ui, sans-serif;
+    line-height: 1.75;
+  }
+
+  /*
+   * Safari zooms the page when a focused input has a font size below 16px.
+   * Setting the floor here means no form can reintroduce that behaviour.
+   */
+  input,
+  select,
+  textarea,
+  button {
+    font-family: inherit;
+    font-size: max(1rem, 16px);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  /* The ring is drawn by :focus-visible, so the default halo is removed. */
+  button:focus,
+  a:focus,
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline-color: var(--focus);
+  }
+
+  ::selection {
+    background-color: var(--brand-soft);
+    color: var(--ink);
+  }
+
+  /* Numbers stay in Latin digits and stay aligned in tables and timelines. */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/*                         iPhone safe area utilities                         */
+/* -------------------------------------------------------------------------- */
+/*
+ * Tabea is used mostly on an iPhone in Safari, and later from the home screen.
+ * These utilities keep controls clear of the Dynamic Island, the home indicator
+ * and the Safari toolbars instead of hiding behind them.
+ */
+
+@utility pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@utility px-safe {
+  padding-inline-start: env(safe-area-inset-left, 0px);
+  padding-inline-end: env(safe-area-inset-right, 0px);
+}
+
+/** Content padding that clears the bottom navigation plus the home indicator. */
+@utility pb-nav {
+  padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+/** Content padding that clears both the bottom navigation and a sticky action bar. */
+@utility pb-nav-actions {
+  padding-bottom: calc(9rem + env(safe-area-inset-bottom, 0px));
+}
+
+/** Sits a sticky element directly above the bottom navigation. */
+@utility bottom-nav {
+  bottom: calc(4rem + env(safe-area-inset-bottom, 0px));
+}
+
+/** Horizontal filter rails: swipeable, with the scrollbar out of the way. */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/** Keeps long task titles and Arabic words from pushing the layout sideways. */
+@utility wrap-anywhere {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                            Component primitives                            */
+/* -------------------------------------------------------------------------- */
+
+@layer components {
+  /* Clamp helpers used by task cards, where two lines is the readable limit. */
+  .clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Skeleton shimmer, deliberately slow and low contrast. */
+  .skeleton {
+    background-color: var(--surface-sunken);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, var(--border) 60%, transparent),
+      transparent
+    );
+    transform: translateX(-100%);
+    animation: skeleton-sweep 1.6s ease-in-out infinite;
+  }
+
+  [dir="rtl"] .skeleton::after {
+    animation-name: skeleton-sweep-rtl;
+  }
+}
+
+@keyframes skeleton-sweep {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes skeleton-sweep-rtl {
+  to {
+    transform: translateX(-200%);
+  }
+}
+
+/* Dialog and bottom sheet motion, short enough not to feel decorative. */
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes sheet-in {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

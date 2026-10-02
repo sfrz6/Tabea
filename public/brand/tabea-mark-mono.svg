@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="Tabea">
+  <title>Tabea</title>
+  <!--
+    The Tabea mark: a tracking ring that has almost closed, with a solid head at
+    the leading edge. The ring is the follow up, the head is the responsibility
+    being followed. The gap at the top is the part still to be done.
+  -->
+  <g fill="none" stroke="currentColor" stroke-width="4.25" stroke-linecap="round">
+    <path d="M11.07 6.73A10.5 10.5 0 1 0 20.93 6.73" />
+  </g>
+  <circle cx="20.93" cy="6.73" r="3.6" fill="currentColor" />
+</svg>

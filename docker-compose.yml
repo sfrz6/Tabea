@@ -1,0 +1,32 @@
+# Local development database.
+#
+# Tabea targets Neon PostgreSQL in production. This container exists only so the
+# application can be run and tested on a laptop without a cloud database. It is
+# not used in any deployment.
+#
+#   docker compose up -d        start it
+#   docker compose down         stop it, keeping the data
+#   docker compose down -v      stop it and erase the data
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: tabea-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: tabea
+      POSTGRES_PASSWORD: tabea_local_dev
+      POSTGRES_DB: tabea
+    ports:
+      # 5434 on the host, because other projects on this machine already use
+      # 5432 and 5433. Inside the container Postgres still listens on 5432.
+      - "5434:5432"
+    volumes:
+      - tabea-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tabea -d tabea"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  tabea-postgres-data:
